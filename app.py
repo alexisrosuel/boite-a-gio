@@ -2,6 +2,8 @@ import os
 import sys
 from flask import Flask, jsonify, render_template, request
 from werkzeug.utils import secure_filename
+from sqlalchemy import desc
+
 #from forms import MusicSearchForm
 
 import database
@@ -28,7 +30,8 @@ def main_page():
     if not os.path.exists(app.config['UPLOAD_PATH']):
         init()
 
-    items = AudioFile.query.all()
+    items = AudioFile.query.order_by(desc(AudioFile.id)).all()
+
 
     search = SearchForm(request.form)
     if request.method == 'POST':
