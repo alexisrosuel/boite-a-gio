@@ -2,13 +2,13 @@ import os
 import sys
 from flask import Flask, jsonify, render_template, request
 from werkzeug.utils import secure_filename
-from sqlalchemy import asc
+from sqlalchemy import asc, desc
 
 #from forms import MusicSearchForm
 
 import database
 import commands
-from model import AudioFile, SearchForm
+from model import AudioFile, SearchForm, SortForm
 # init flask app instance
 app = Flask(__name__,
             static_url_path='',
@@ -30,16 +30,26 @@ def main_page():
     if not os.path.exists(app.config['UPLOAD_PATH']):
         init()
 
-    items = AudioFile.query.order_by(asc(AudioFile.id)).all()
+    column_sort = asc(AudioFile.id)
+    sort = SortForm(request.form)
+    if request.method == 'POST' and sort.data['select'] is not None:
+        sort_string = sort.data['select']
+        map_string_to_column = {'Date d\'ajout': desc(AudioFile.date_added),
+                                'Nombre de lectures': desc(AudioFile.nb_lecture),
+                                'Utilisateur': asc(AudioFile.user),
+                                'Nom': asc(AudioFile.title)}
+        column_sort = map_string_to_column[sort_string]
 
+    items = AudioFile.query.order_by(column_sort).all()
 
     search = SearchForm(request.form)
-    if request.method == 'POST':
+    if request.method == 'POST' and search.data['search'] is not None:
         search_string = search.data['search'].lower()
         if search.data['search'] != '':
             items = [item for item in items if search_string in item.title.lower() or search_string in item.user.lower() or search_string in item.filename.lower()]
 
-    return render_template('index.html', items=items, form=search)
+
+    return render_template('index.html', items=items, search_form=search, sort_form=sort)
 
 
 

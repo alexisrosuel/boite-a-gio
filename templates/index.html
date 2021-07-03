@@ -15,13 +15,37 @@
 
   <a href="{{ url_for('upload') }}">Upload file</a>
 
-  {% from "_formhelpers.html" import render_field %}
-  <form method="post">
-    <dl>
-      {{ render_field(form.search) }}
-    </p></dl>
-    <p><input type="submit" value="Search">
-  </p></form>
+
+
+
+  <div class="wrapper">
+    <div>
+      {% from "_formhelpers.html" import render_field %}
+      <form method="post">
+        <dl>
+          {{ render_field(search_form.search) }}
+        </p></dl>
+        <p><input type="submit" value="Search">
+      </p></form>
+    </div>
+
+    <div>
+      <form method="post">
+        <dl>
+          {{ render_field(sort_form.select) }}
+        </p></dl>
+        <p><input type="submit" value="Sort">
+      </p></form>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
 
   <div class="wrapper">
 

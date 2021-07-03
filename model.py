@@ -23,3 +23,12 @@ class SearchForm(Form):
     choices = []
     #select = SelectField('Rechercher :')
     search = StringField('')
+
+
+
+
+class SortForm(Form):
+    choices = ['Utilisateur', 'Nombre de lectures', 'Nom', 'Date d\'ajout']
+    select = SelectField('', choices=choices)
+    #name    = StringField(u'Full Name', [validators.required(), validators.length(max=10)])
+    #address = TextAreaField(u'Mailing Address', [validators.optional(), validators.length(max=200)])
