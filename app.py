@@ -54,6 +54,7 @@ def upload_file():
         user = request.form.get('user')
         title = request.form.get('title')
         filename = request.files['file'].filename
+        filename = filename.replace(' ','_')
         uploaded_file = request.files['file']
         byte_array = request.files['file'].read()
         request.files['file'].seek(0)
