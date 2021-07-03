@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 
 import database
 import commands
-from model import AudioFile
+from model import AudioFile, SearchForm
 # init flask app instance
 app = Flask(__name__,
             static_url_path='',
@@ -23,13 +23,20 @@ database.init_app(app)
 commands.init_app(app)
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def main_page():
     if not os.path.exists(app.config['UPLOAD_PATH']):
         init()
 
     items = AudioFile.query.all()
-    return render_template('index.html', items=items)
+
+    search = SearchForm(request.form)
+    if request.method == 'POST':
+        search_string = search.data['search']
+        if search.data['search'] != '':
+            items = [item for item in items if search_string in item.title or search_string in item.user or search_string in item.filename]
+
+    return render_template('index.html', items=items, form=search)
 
 
 

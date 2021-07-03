@@ -12,3 +12,14 @@ class AudioFile(db.Model):
     user = db.Column(db.String(80), unique=False, nullable=False)
     #runtime = db.Column(db.Interval(), unique=True, nullable=False)
     file = db.Column(db.LargeBinary, unique=False, nullable=False)
+
+
+
+
+
+
+from wtforms import Form, StringField, SelectField
+class SearchForm(Form):
+    choices = []
+    #select = SelectField('Rechercher :')
+    search = StringField('')
