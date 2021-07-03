@@ -18,3 +18,18 @@ migrate_db:
 
 upgrade_db:
 				python3 source/manage.py db upgrade
+
+
+
+ssh:
+				heroku ps:exec
+
+create_db:
+				heroku run flask create-db
+
+connection_postgres:
+				heroku pg:psql
+
+
+logs:
+				heroku logs --app boite-a-gio -t

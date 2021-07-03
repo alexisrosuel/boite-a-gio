@@ -51,13 +51,28 @@ def upload_file():
                 abort(400)
             uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
 
-        model = AudioFile(title=title, user=user, filename=filename)
+        model = AudioFile(title=title, user=user, filename=filename, file=request.files['file'].read())
         database.db.session.add(model)
         database.db.session.commit()
 
         return 'file uploaded successfully'
 
 
+
+
+
+@app.route("/init")
+def init():
+    if not os.path.exists(app.config['UPLOAD_PATH']):
+        os.makedirs(app.config['UPLOAD_PATH'])
+
+    items = AudioFile.query.all()
+    for item in items:
+        file = open(app.config['UPLOAD_PATH']+item.filename, "wb")
+        file.write(item.file)
+        file.close()
+
+    return 'init successfull'
 
 
 if __name__ == "__main__":
