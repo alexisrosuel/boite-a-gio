@@ -28,11 +28,10 @@
     {% for item in items %}
     <div>
     <figure>
-      <figcaption>{{ item.title }}, par {{ item.user }}</figcaption>
+      <figcaption>{{ item.title }}, par {{ item.user }}, lu {{ item.nb_lecture }} fois</figcaption>
 
-        <audio controls>
+        <audio onplay="count(this)" id={{ item.id }} controls>
           <source src={{ url_for('static', filename = 'audio_files/') }}{{ item.filename }} type="audio/mpeg">
-
 
         Your browser does not support the audio element.
         </audio>
@@ -40,6 +39,20 @@
     </div>
     {% endfor %}
   </div>
+
+
+  <script>
+    function count(element){
+      var file_id = element.attributes;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", '/count', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+      const json = {"id": file_id[1].value };
+      xhr.send(JSON.stringify(json));
+
+    }
+  </script>
 
 
 
