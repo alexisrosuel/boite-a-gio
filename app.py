@@ -32,9 +32,9 @@ def main_page():
 
     search = SearchForm(request.form)
     if request.method == 'POST':
-        search_string = search.data['search']
+        search_string = search.data['search'].lower()
         if search.data['search'] != '':
-            items = [item for item in items if search_string in item.title or search_string in item.user or search_string in item.filename]
+            items = [item for item in items if search_string in item.title.lower() or search_string in item.user.lower() or search_string in item.filename.lower()]
 
     return render_template('index.html', items=items, form=search)
 
