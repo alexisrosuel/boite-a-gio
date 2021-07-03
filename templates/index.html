@@ -5,7 +5,7 @@
         <title>La boite à Gio</title>
 </head>
 
-
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 
 <body>
 
@@ -15,22 +15,24 @@
 
   <a href="{{ url_for('upload') }}">Upload file</a>
 
+  <div class="wrapper">
+
+    {% for item in items %}
+    <div>
+    <figure>
+      <figcaption>{{ item.title }}, par {{ item.user }}</figcaption>
+
+        <audio controls>
+          <source src={{ url_for('static', filename = 'audio_files/') }}{{ item.filename }} type="audio/mpeg">
 
 
-{% for item in items %}
-<figure>
-  <figcaption>{{ item.title }}, par {{ item.user }}</figcaption>
+        Your browser does not support the audio element.
+        </audio>
+    </figure>
+    </div>
+    {% endfor %}
+  </div>
 
-    <audio controls>
-      <source src={{ url_for('static', filename = 'audio_files/') }}{{ item.filename }} type="audio/mpeg">
-
-
-    Your browser does not support the audio element.
-    </audio>
-    </br>
-    <p>Click on play icon to play</p>
-</figure>
-{% endfor %}
 
 
 

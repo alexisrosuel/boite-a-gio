@@ -133,3 +133,4 @@ dmypy.json
 
 .env
 audio_files/
+local_database.db
