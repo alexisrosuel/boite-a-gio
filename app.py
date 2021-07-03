@@ -2,6 +2,7 @@ import os
 import sys
 from flask import Flask, jsonify, render_template, request
 from werkzeug.utils import secure_filename
+#from forms import MusicSearchForm
 
 import database
 import commands
@@ -44,6 +45,8 @@ def upload_file():
         title = request.form.get('title')
         filename = request.files['file'].filename
         uploaded_file = request.files['file']
+        byte_array = request.files['file'].read()
+        request.files['file'].seek(0)
 
         if not os.path.exists(app.config['UPLOAD_PATH']):
             os.makedirs(app.config['UPLOAD_PATH'])
@@ -54,7 +57,7 @@ def upload_file():
                 abort(400)
             uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
 
-        model = AudioFile(title=title, user=user, filename=filename, file=request.files['file'].read())
+        model = AudioFile(title=title, user=user, filename=filename, file=byte_array)
         database.db.session.add(model)
         database.db.session.commit()
 
