@@ -24,6 +24,9 @@ commands.init_app(app)
 
 @app.route("/")
 def main_page():
+    if not os.path.exists(app.config['UPLOAD_PATH']):
+        init()
+
     items = AudioFile.query.all()
     return render_template('index.html', items=items)
 
