@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+        <title>La boite à Gio</title>
+    </head>
+<body>
+
+
+
+{% for item in items %}
+<figure>
+  <figcaption>{{ item.title }}, par {{ item.user }}</figcaption>
+
+    <audio controls>
+      <source src={{ url_for('static', filename = 'audio_files/') }}{{ item.filename }} type="audio/mpeg">
+
+
+    Your browser does not support the audio element.
+    </audio>
+    </br>
+</figure>
+{% endfor %}
+
+
+
+
+
+</body>
+</html>
