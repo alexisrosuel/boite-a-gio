@@ -11,4 +11,4 @@ class AudioFile(db.Model):
     filename = db.Column(db.String(80), unique=True, nullable=False)
     user = db.Column(db.String(80), unique=False, nullable=False)
     #runtime = db.Column(db.Interval(), unique=True, nullable=False)
-    file = db.Column(db.LargeBinary(), unique=False, nullable=False)
+    file = db.Column(db.LargeBinary, unique=False, nullable=False)
