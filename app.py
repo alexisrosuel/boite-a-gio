@@ -4,6 +4,12 @@ from flask import Flask, jsonify, render_template, request
 from werkzeug.utils import secure_filename
 from sqlalchemy import asc, desc
 
+import speech_recognition as sr
+from pydub import AudioSegment
+
+from os import listdir
+from os.path import isfile, join
+
 #from forms import MusicSearchForm
 
 import database
@@ -46,7 +52,7 @@ def main_page():
     if request.method == 'POST' and search.data['search'] is not None:
         search_string = search.data['search'].lower()
         if search.data['search'] != '':
-            items = [item for item in items if search_string in item.title.lower() or search_string in item.user.lower() or search_string in item.filename.lower()]
+            items = [item for item in items if search_string in item.title.lower() or search_string in item.user.lower() or search_string in item.filename.lower() or search_string in item.transcription.lower()]
 
 
     return render_template('index.html', items=items, search_form=search, sort_form=sort)
@@ -116,6 +122,45 @@ def init():
 
 
     return 'init successfull'
+
+
+
+
+
+
+
+
+
+
+@app.route("/stt")
+def speech_to_text():
+    r = sr.Recognizer()
+
+    audio_files = AudioFile.query.with_entities(AudioFile.filename).all()
+    audio_files = [audio_file[0] for audio_file in audio_files]
+
+    for audio_file in audio_files:
+        file_ext = os.path.splitext(audio_file)[1]
+        if file_ext == '.mp3':
+            source, dest = join(app.config['UPLOAD_PATH'], audio_file), join(app.config['UPLOAD_PATH'], os.path.splitext(audio_file)[0]+'.wav')
+            sound = AudioSegment.from_mp3(source)
+            sound.export(dest, format="wav")
+        else:
+            dest = join(app.config['UPLOAD_PATH'], audio_file)
+
+
+        with sr.AudioFile(dest) as audio_source:
+            audio_data = r.record(audio_source)
+            text = ''
+            try:
+                text = r.recognize_google(audio_data, language='fr-FR', pfilter=1, show_all=False)
+            except:
+                pass
+
+            item = AudioFile.query.filter_by(filename=audio_file).first()
+            item.transcription = text
+            database.db.session.commit()
+    return 'stt successfull'
 
 
 if __name__ == "__main__":

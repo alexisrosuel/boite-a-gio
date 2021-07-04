@@ -12,6 +12,7 @@ class AudioFile(db.Model):
     user = db.Column(db.String(80), unique=False, nullable=False)
     #runtime = db.Column(db.Interval(), unique=True, nullable=False)
     file = db.Column(db.LargeBinary, unique=False, nullable=False)
+    transcription = db.Column(db.String(1000), unique=False, nullable=True)
 
 
 
