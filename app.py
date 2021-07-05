@@ -136,8 +136,9 @@ def init():
 def speech_to_text():
     r = sr.Recognizer()
 
-    audio_files = AudioFile.query.with_entities(AudioFile.filename).all()
+    audio_files = AudioFile.query.filter(AudioFile.transcription.is_(None)).with_entities(AudioFile.filename).all()
     audio_files = [audio_file[0] for audio_file in audio_files]
+    print(audio_files , file=sys.stderr)
 
     for audio_file in audio_files:
         file_ext = os.path.splitext(audio_file)[1]
