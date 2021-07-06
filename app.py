@@ -14,7 +14,7 @@ from os.path import isfile, join
 
 import database
 import commands
-from model import AudioFile, SearchForm, SortForm
+from model import AudioFile, SearchForm, SortForm, User
 # init flask app instance
 app = Flask(__name__,
             static_url_path='',
@@ -67,8 +67,18 @@ def upload():
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        user_id = request.form.get('user id')
+
+        user = User.query.filter_by(user_id=user_id).first()
+        if not user:
+            return 'id Discord inexistant'
+        elif user.active is False:
+            return 'id Discord banni'
+
+
         user = request.form.get('user')
         title = request.form.get('title')
+
         filename = request.files['file'].filename
         filename = filename.replace(' ','_')
         uploaded_file = request.files['file']
@@ -84,7 +94,7 @@ def upload_file():
                 abort(400)
             uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
 
-        model = AudioFile(title=title, user=user, filename=filename, file=byte_array)
+        model = AudioFile(title=title, user=user, filename=filename, file=byte_array, user_id=user_id)
         database.db.session.add(model)
         database.db.session.commit()
 

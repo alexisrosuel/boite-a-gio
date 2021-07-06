@@ -13,6 +13,19 @@ class AudioFile(db.Model):
     #runtime = db.Column(db.Interval(), unique=True, nullable=False)
     file = db.Column(db.LargeBinary, unique=False, nullable=False)
     transcription = db.Column(db.String(1000), unique=False, nullable=True)
+    user_id = db.Column(db.String(80), unique=False, nullable=False)
+
+
+
+
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    user_id = db.Column(db.String(80), unique=True, nullable=False)
+    active = db.Column(db.Boolean, unique=False, nullable=False)
+
 
 
 

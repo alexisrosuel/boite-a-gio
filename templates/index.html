@@ -52,7 +52,7 @@
     {% for item in items %}
     <div>
     <figure>
-      <figcaption>{{ item.title }}, par {{ item.user }}, lu {{ item.nb_lecture }} fois</figcaption>
+      <figcaption>{{item.title}}, par {{item.user}}, lu {{item.nb_lecture}} fois</figcaption>
 
         <audio onplay="count(this)" id={{ item.id }} controls>
           <source src={{ url_for('static', filename = 'audio_files/') }}{{ item.filename }} type="audio/mpeg">

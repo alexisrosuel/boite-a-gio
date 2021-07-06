@@ -18,4 +18,4 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     ENV="development"
     DEVELOPMENT = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///local_database.db'
+    SQLALCHEMY_DATABASE_URI = "postgresql://alexis:password@localhost:5432/boite_local"#'sqlite:///local_database.db'
