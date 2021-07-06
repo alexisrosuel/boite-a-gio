@@ -52,7 +52,7 @@ def main_page():
     if request.method == 'POST' and search.data['search'] is not None:
         search_string = search.data['search'].lower()
         if search.data['search'] != '':
-            items = [item for item in items if search_string in item.title.lower() or search_string in item.user.lower() or search_string in item.filename.lower() or search_string in item.transcription.lower()]
+            items = [item for item in items if search_string in item.title.lower() or search_string in item.user.lower() or search_string in item.filename.lower() or search_string in str(item.transcription.lower())]
 
 
     return render_template('index.html', items=items, search_form=search, sort_form=sort)
